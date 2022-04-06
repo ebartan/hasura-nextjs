@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import initializeApollo from '../lib/apollo'
 import { gql} from '@apollo/client'
 export default function Home(products) {
-    console.log(products)
+
     return (
         <div className={styles.container}>
           <Head>
@@ -14,6 +14,13 @@ export default function Home(products) {
           </Head>
           <div>
               Products
+              {console.log(products.products.data.products)}
+              {products.products.data.products.map(
+                  (product) => (
+                      <div key={product.id}> {product.name} </div>
+
+                  )
+              )}
           </div>
           </div>
           )
@@ -24,8 +31,8 @@ export async function getStaticProps(context) {
     const client = initializeApollo();
 
     const products = await client.query({
-        query: gql` query fetchWorks {
-                works {
+        query: gql` query fetchProducts {
+            products {
                     id
                     name
                     description
