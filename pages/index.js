@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { SiHasura, SiNextdotjs, SiGraphql, SiPostgresql } from 'react-icons/si';
-export default function Home(works) {
+export default function Home(navigation) {
 
   return (
     <div>
@@ -13,25 +13,25 @@ export default function Home(works) {
       </Head>
 
       <main>
-        <div className=' flex flex-wrap items-center justify-center'>
+        <div className=' flex flex-wrap items-center justify-center p-2'>
           <SiHasura size="2em" color="#8C7A64" className="mt-2 mr-2" />
           <SiNextdotjs size="2em" color="#8C7A64" className="mt-2 mr-2" />
           <SiGraphql size="2em" color="#8C7A64" className="mt-2 mr-2" />
           <SiPostgresql size="2em" color="#8C7A64" className="mt-2 mr-2" />
         </div>
 
-        <h1>
-          Hasura with Nextjs
-        </h1>
-        <div>
-          {console.log(works)}
-          {works.works.map((work) => (
-            <div key={work.id}>{work.name}</div>
+        {<div className=' flex flex-wrap items-center justify-evenly p-2 text-teal-800 font-bold text-2xl'>
+          {console.log(navigation)}
+          {navigation.navigation.map((nav) => (
+            <div key={nav.id}>{nav.name}</div>
           ))}
 
-        </div>
+        </div>}
 
 
+        <h1 className=' text-center'>
+          Hasura with Nextjs
+        </h1>
       </main>
 
       <footer className={styles.footer}>
@@ -59,28 +59,25 @@ export async function getStaticProps(context) {
       // Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
     },
     body: JSON.stringify({
-      query: `query fetchWorks {
-        works {
+      query: `query fetchNavigation {
+        navigation {
           id
           name
-          description
-          created_at
-          updated_at
         }
       }
       
       `,
       variables: {},
-      operationName: "fetchWorks",
+      operationName: "fetchNavigation",
 
     })
   }
   const fetchResponse = await fetch('https://ebartanhasuranextjs.hasura.app/v1/graphql', options)
   const fetchJson = await fetchResponse.json()
-  console.log(fetchJson.data.works)
-  const works = fetchJson.data.works
+  console.log(fetchJson.data.navigation)
+  const navigation = fetchJson.data.navigation
   return {
 
-    props: { works: works }
+    props: { navigation: navigation }
   }
 }
